@@ -1,0 +1,41 @@
+---
+title: "Base R Programming"
+author: "Tyler Hunt"
+format: html
+editor: visual
+---
+
+## Medical Experiment on Blood Pressure
+
+We are creating two vectors. The vector named "pre" holds pre-treatment blood pressure values and "post" holds post-treatment blood pressure values
+
+## Running Code
+
+```{r}
+pre <- c(120, 151, 125, 126, 115, 132, 132, 129, 134, 139, 127, 122, 127, 135, 133, 128, 147, 138, 140, 132)
+post <- c(127, 145, 135, 122, 115, 122, 123, 126, 126, 129, 132, 146, 120, 114, 121, 120, 128, 120, 133, 115)
+```
+
+Lets assign common names to both vectors so we know what patient we're looking at.
+
+```{r}
+subject_ids <- paste("Subject",1:20,sep="_")
+names(pre) <- subject_ids
+names(post) <- subject_ids
+```
+
+Now that we have names assigned to the patients, lets capture the difference in post vs pre-treatment measures and the average result form these differences.
+
+```{r}
+diff <- pre - post
+average_diff <- mean(diff)
+```
+
+Okay, so on average it seems the patients experienced a decrease of 5.65 in blood pressure. Now which patients (and their indices) experience a decrease?
+
+```{r}
+which(diff > 0)
+positive_diff_indices <- diff > 0
+subvector <- diff[positive_diff_indices]
+```
+
