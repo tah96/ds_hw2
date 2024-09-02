@@ -9,7 +9,7 @@ editor: visual
 
 We are creating two vectors. The vector named "pre" holds pre-treatment blood pressure values and "post" holds post-treatment blood pressure values
 
-## Running Code
+## Task 1
 
 ```{r}
 pre <- c(120, 151, 125, 126, 115, 132, 132, 129, 134, 139, 127, 122, 127, 135, 133, 128, 147, 138, 140, 132)
@@ -29,13 +29,81 @@ Now that we have names assigned to the patients, lets capture the difference in 
 ```{r}
 diff <- pre - post
 average_diff <- mean(diff)
+average_diff
 ```
 
-Okay, so on average it seems the patients experienced a decrease of 5.65 in blood pressure. Now which patients (and their indices) experience a decrease?
+Okay, so on average it seems the patients experienced a decrease of 5.65 in blood pressure. Now which patients (and their indices) experience a decrease? Of those that experience a decrease what is the average decrease?
 
 ```{r}
 which(diff > 0)
 positive_diff_indices <- diff > 0
 subvector <- diff[positive_diff_indices]
+mean(subvector)
+```
+We can see from the above that of those patients that have a decreased in blood pressure, the average decrease is 10.6 units
+
+## Task 2
+
+Lets create a data frame consisting of columns for patients, pre-treatments blood pressure, post-treatment blood pressure and the different between pre and post.
+
+```{r}
+df <- data.frame(patient = subject_ids,pre_bp = pre ,post_bp = post ,diff_bp =diff)
+df
+```
+
+From this dataframe, lets only keep rows where diff_bp is greater than 0
+
+```{r}
+decrease_df <- subset(df,df$diff_bp > 0)
+```
+
+Lets add a column that looks at post_bp. If that value is < 120 we want the new column to show TRUE. Otherwise, FALSE.
+
+```{r}
+decrease_df$post_less_120 = decrease_df$post_bp < 120
+```
+
+Lets print our final result. As a recap, we made the following adjustments to the initial dataframe we created.
+
+1.   Created a subset dataframe that contains only subjects where their "diff_bp" > 0
+2.   Add a new column "post_less_120" which is TRUE if "post_bp" < 120
+
+```{r}
+knitr::kable(decrease_df)
+```
+
+## Task 3
+
+Lets consider a new set of patients and their data. We will also assign names and replicate some calculations from previous tasks
+
+```{r}
+pre_t3 <- c(138, 135, 147, 117, 152, 134, 114, 121, 131, 130)
+post_t3 <- c(105, 136, 123, 130, 134, 143, 135, 139, 120, 124)
+diff_t3 <- pre_t3 - post_t3
+subject_ids_t3 <- paste("Subject",1:10,sep="_")
+
+t3_init_df <- data.frame(patient = subject_ids_t3,pre_bp = pre_t3 ,post_bp = post_t3 ,diff_bp = diff_t3, post_less_120 = post_t3 < 120)
+
+t3_df <- subset(t3_init_df, t3_init_df$diff_bp > 0)
+```
+
+Lets list the dataframe from task 2 & task 3 in a list
+
+```{r}
+list_of_df <- list(treatment = decrease_df, placebo = t3_df)
+```
+
+Lets list some different ways we can access the first item within that list
+
+```{r}
+list_of_df[1]
+list_of_df[[1]]
+list_of_df["treatment"]
+```
+
+Lets see if we can access just the pre_bp column of the placebo dataset
+
+```{r}
+list_of_df$placebo$pre_bp
 ```
 
