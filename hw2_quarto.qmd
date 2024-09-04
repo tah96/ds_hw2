@@ -24,7 +24,7 @@ names(pre) <- subject_ids
 names(post) <- subject_ids
 ```
 
-Now that we have names assigned to the patients, lets capture the difference in post vs pre-treatment measures and the average result form these differences.
+Now that we have names assigned to the patients, lets capture the difference in post vs pre-treatment measures and the average result form these differences. We can simply do this with basic vector math (pre vector - post vector) and calculate the average from this new vector
 
 ```{r}
 diff <- pre - post
@@ -34,12 +34,15 @@ average_diff
 
 Okay, so on average it seems the patients experienced a decrease of 5.65 in blood pressure. Now which patients (and their indices) experience a decrease? Of those that experience a decrease what is the average decrease?
 
+The code below provides the patient identifier (Subject_No.) and the index. In the new vector ("subvector"), we are passing the indicies to only pull patients with a positive decrease.
+
 ```{r}
 which(diff > 0)
 positive_diff_indices <- diff > 0
 subvector <- diff[positive_diff_indices]
 mean(subvector)
 ```
+
 We can see from the above that of those patients that have a decreased in blood pressure, the average decrease is 10.6 units
 
 ## Task 2
@@ -51,7 +54,7 @@ df <- data.frame(patient = subject_ids,pre_bp = pre ,post_bp = post ,diff_bp =di
 df
 ```
 
-From this dataframe, lets only keep rows where diff_bp is greater than 0
+From this dataframe, lets only keep rows where diff_bp is greater than 0. We accomplish this by taking a subset of the dataframe and passing a condition to only return records where the difference in blood pressure is greater than 0 (positive decrease)
 
 ```{r}
 decrease_df <- subset(df,df$diff_bp > 0)
@@ -65,8 +68,8 @@ decrease_df$post_less_120 = decrease_df$post_bp < 120
 
 Lets print our final result. As a recap, we made the following adjustments to the initial dataframe we created.
 
-1.   Created a subset dataframe that contains only subjects where their "diff_bp" > 0
-2.   Add a new column "post_less_120" which is TRUE if "post_bp" < 120
+1.  Created a subset dataframe that contains only subjects where their "diff_bp" > 0
+2.  Add a new column "post_less_120" which is TRUE if "post_bp" \< 120
 
 ```{r}
 knitr::kable(decrease_df)
@@ -87,13 +90,13 @@ t3_init_df <- data.frame(patient = subject_ids_t3,pre_bp = pre_t3 ,post_bp = pos
 t3_df <- subset(t3_init_df, t3_init_df$diff_bp > 0)
 ```
 
-Lets list the dataframe from task 2 & task 3 in a list
+Lets create a list that includes the dataframes from task 2 (treatment) & task 3 (placebo)
 
 ```{r}
 list_of_df <- list(treatment = decrease_df, placebo = t3_df)
 ```
 
-Lets list some different ways we can access the first item within that list
+Lets list some different ways we can access the first item within that list. We can use single-square brackets, double-square brackets or reference the name of the first item directly ("treatment" in this case)
 
 ```{r}
 list_of_df[1]
@@ -101,9 +104,8 @@ list_of_df[[1]]
 list_of_df["treatment"]
 ```
 
-Lets see if we can access just the pre_bp column of the placebo dataset
+Lets see if we can access just the pre_bp column of the placebo dataset. We accomplish this by taking advantage by chaining our $ operator. We are using it to access the "placebo" dataframe and "pre_bp" within that dataframe.
 
 ```{r}
 list_of_df$placebo$pre_bp
 ```
-
